@@ -16,7 +16,7 @@ public class FileUtility {
             inputData.initQueries(querySize);
             for (int i = 0; i < querySize; i++) {
                 SingleLiteral query = new SingleLiteral(in.nextLine());
-                inputData.setQuery(null, i);
+                inputData.setQuery(query, i);
             }
 
             // Set the sentences
