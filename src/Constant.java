@@ -1,2 +1,2 @@
-public class Constant implements Term{
+public class Constant implements Term {
 }

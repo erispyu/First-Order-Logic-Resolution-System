@@ -8,8 +8,12 @@ public class KnowledgeBase {
 
     private Map<String, Predicate> predicateMap;
 
-    public KnowledgeBase () {
+    public KnowledgeBase() {
         this.KBSize = 0;
+    }
+
+    public KnowledgeBase(int KBSize) {
+        this.KBSize = KBSize;
     }
 
     public void appendSentence(Sentence sentence) {
@@ -19,6 +23,12 @@ public class KnowledgeBase {
 
     public void appendPredicate(Predicate predicate) {
         this.predicateMap.put(predicate.getName(), predicate);
+    }
+
+    public void appendPredicateList(List<Predicate> predicateList) {
+        for (Predicate predicate: predicateList) {
+            appendPredicate(predicate);
+        }
     }
 
     public int getKBSize() {

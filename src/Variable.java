@@ -1,2 +1,2 @@
-public class Variable implements Term{
+public class Variable implements Term {
 }

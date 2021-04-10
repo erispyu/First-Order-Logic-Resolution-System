@@ -7,6 +7,6 @@ public class Main {
     private static void run(String inputFilePath, String outputFilePath) {
         FileUtility.parseInput(inputFilePath);
 
-        FileUtility.generateOutput(outputFilePath);
+        FileUtility.generateOutput(outputFilePath, null);
     }
 }

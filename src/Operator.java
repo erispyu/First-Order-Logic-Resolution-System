@@ -4,13 +4,9 @@ public enum Operator {
     Implication("=>"),
     Negation("~");
 
-    private String denotation;
+    public String denotation;
 
     private Operator(String denotation) {
         this.denotation = denotation;
-    }
-
-    public String getDenotation() {
-        return denotation;
     }
 }
