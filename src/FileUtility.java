@@ -23,8 +23,7 @@ public class FileUtility {
             int sentenceSize = in.nextInt();
             inputData.initSentences(sentenceSize);
             for (int i = 0; i < sentenceSize; i++) {
-                Sentence sentence = new Sentence(in.nextLine());
-                inputData.setSentence(sentence, i);
+
             }
 
             in.close();

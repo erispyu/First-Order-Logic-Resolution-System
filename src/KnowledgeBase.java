@@ -2,7 +2,6 @@ import java.util.List;
 import java.util.Map;
 
 public class KnowledgeBase {
-    private List<Sentence> sentenceList;
 
     private int KBSize;
 
@@ -14,11 +13,6 @@ public class KnowledgeBase {
 
     public KnowledgeBase(int KBSize) {
         this.KBSize = KBSize;
-    }
-
-    public void appendSentence(Sentence sentence) {
-        this.sentenceList.add(sentence);
-        this.KBSize++;
     }
 
     public void appendPredicate(Predicate predicate) {

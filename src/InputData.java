@@ -2,7 +2,6 @@ public class InputData {
     private int querySize;
     private SingleLiteral[] queries;
     private int sentenceSize;
-    private Sentence[] sentences;
 
     public InputData() {
 
@@ -19,18 +18,5 @@ public class InputData {
 
     public void initSentences(int sentenceSize) {
         this.sentenceSize = sentenceSize;
-        this.sentences = new Sentence[sentenceSize];
-    }
-
-    public void setSentence(Sentence sentence, int index) {
-        this.sentences[index] = sentence;
-    }
-
-    public SingleLiteral[] getQueries() {
-        return queries;
-    }
-
-    public Sentence[] getSentences() {
-        return sentences;
     }
 }

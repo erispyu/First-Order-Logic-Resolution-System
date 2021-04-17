@@ -1,36 +1,56 @@
-import java.util.List;
-
-public class SingleLiteral extends Sentence{
+public class SingleLiteral{
 
     private Predicate predicate;
 
     private Term[] terms;
 
-    private boolean isTrue;
+    private boolean isPositive;
 
     public SingleLiteral(String str) {
         String predicateName;
-        int predicateBeginIndex = -1;
-        int predicateEndIndex = -1;
+        int predicateNameBeginIndex = -1;
+        int predicateNameEndIndex = -1;
 
+        // Parse whether the str starts with a negation operator
+        // Get the start position of the predicate's name
         if (str.substring(0, 1).equals(Operator.Negation.denotation)) {
-            this.isTrue = false;
-            predicateBeginIndex = 0;
+            this.isPositive = false;
+            predicateNameBeginIndex = 1;
         } else {
-            this.isTrue = true;
-            predicateBeginIndex = 1;
+            this.isPositive = true;
+            predicateNameBeginIndex = 0;
         }
 
-        for (int i = predicateBeginIndex; i < str.length(); i++) {
+        // Get the end position of the predicate's name
+        for (int i = predicateNameBeginIndex; i < str.length(); i++) {
             char c = str.charAt(i);
             if (c == '(') {
-                predicateEndIndex = i;
-                predicateName = str.substring(predicateBeginIndex, predicateEndIndex);
+                predicateNameEndIndex = i;
                 break;
             }
         }
 
+        // Get the predicate's name
+        predicateName = str.substring(predicateNameBeginIndex, predicateNameEndIndex);
 
+        int argSize = 0;
+        String args = str.substring(predicateNameEndIndex + 1, str.length() - 1);
+        String[] termStrArr = args.split(",");
+        argSize = termStrArr.length;
+
+        // Construct a Predicate instance
+        this.predicate = new Predicate(predicateName, argSize);
     }
 
+    public boolean isPositive() {
+        return this.isPositive;
+    }
+
+    private void parseTerms(String[] termStrArr) {
+        int termSize = termStrArr.length;
+        this.terms = new Term[termSize];
+        for (int i = 0; i < termSize; i++) {
+
+        }
+    }
 }
