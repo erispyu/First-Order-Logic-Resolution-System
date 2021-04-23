@@ -1,3 +1,4 @@
+import java.util.LinkedList;
 import java.util.List;
 
 public class Tester {
@@ -14,7 +15,15 @@ public class Tester {
 
         KnowledgeBase knowledgeBase = new KnowledgeBase(sentences);
 
-        FileUtility.generateOutput(outputFilePath, sentences);
+        List<String> results = new LinkedList<>();
+
+        for (SingleLiteral query: queries) {
+            ResolutionHelper resolutionHelper = new ResolutionHelper(query, knowledgeBase);
+            boolean result = resolutionHelper.query();
+            results.add(Boolean.toString(result).toUpperCase());
+        }
+
+        FileUtility.generateOutput(outputFilePath, results);
     }
 
 }

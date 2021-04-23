@@ -50,6 +50,18 @@ public class SingleLiteral{
         this.predicate = new Predicate(predicateName, argSize);
     }
 
+    public SingleLiteral(SingleLiteral literal, boolean isNegated) {
+        this.predicate = literal.getPredicate();
+        this.terms = literal.getTerms();
+        this.isPositive = isNegated ? !literal.isPositive : literal.isPositive;
+        this.str = literal.str;
+        if (!this.isPositive) {
+            this.str = Operator.Negation.denotation + this.str;
+        } else {
+            this.str = this.str.substring(1);
+        }
+    }
+
     private void parseTerms(String[] termStrArr) {
         int termSize = termStrArr.length;
         this.terms = new Term[termSize];

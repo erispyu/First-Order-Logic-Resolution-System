@@ -11,6 +11,7 @@ public class KnowledgeBase {
 
     private List<CNFClause> CFNClauseList;
 
+    // Init the KB
     public KnowledgeBase(List<String> sentences) {
         this.predicateMap = new HashMap<>();
         this.constantMap = new HashMap<>();
@@ -23,6 +24,12 @@ public class KnowledgeBase {
                 parseSingleLiteral(sentence);
             }
         }
+    }
+
+    // Add the negation of the Query
+    public void addNegatedQuery(SingleLiteral query) {
+        SingleLiteral negatedQuery = new SingleLiteral(query, true);
+        this.CFNClauseList.add(new CNFClause(negatedQuery));
     }
 
     private void parseSingleLiteral(String str) {
