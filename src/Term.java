@@ -1,3 +1,5 @@
+import java.util.Objects;
+
 public class Term {
     private boolean isConstant;
 
@@ -27,4 +29,20 @@ public class Term {
         return this.name;
     }
 
+    public void hashName(int hashCode) {
+        this.name = this.name + "_" + hashCode;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Term term = (Term) o;
+        return isConstant == term.isConstant && Objects.equals(name, term.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(isConstant, name);
+    }
 }

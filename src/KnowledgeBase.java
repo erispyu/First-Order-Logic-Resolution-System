@@ -72,4 +72,8 @@ public class KnowledgeBase {
     private void addCNFClause(CNFClause clause) {
         this.CFNClauseList.add(clause);
     }
+
+    public List<CNFClause> getCFNClauseList() {
+        return CFNClauseList;
+    }
 }

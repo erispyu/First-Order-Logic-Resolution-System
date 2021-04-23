@@ -1,7 +1,4 @@
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class CNFClause {
     private List<SingleLiteral> literalList;
@@ -14,8 +11,13 @@ public class CNFClause {
 
     private Map<String, Term> variableMap;
 
-    public  CNFClause() {
-
+    public CNFClause() {
+        this.literalList = new LinkedList<>();
+        this.positiveLiteralList = new LinkedList<>();
+        this.negativeLiteralList = new LinkedList<>();
+        this.predicateMap = new HashMap<>();
+        this.constantMap = new HashMap<>();
+        this.variableMap = new HashMap<>();
     }
 
     // Convert Implication sentence to CNF Clause
@@ -129,6 +131,7 @@ public class CNFClause {
             if (term.isConstant()) {
                 addConstant(term);
             } else {
+                term.hashName(this.hashCode());
                 addVariable(term);
             }
         }
@@ -136,6 +139,10 @@ public class CNFClause {
 
     @Override
     public String toString() {
+        if (isEmpty()) {
+            return "Empty";
+        }
+
         StringBuffer sb = new StringBuffer();
         for (SingleLiteral literal: literalList) {
             sb.append(literal.toString());
@@ -143,5 +150,26 @@ public class CNFClause {
         }
         sb.deleteCharAt(sb.length() - 1);
         return sb.toString();
+    }
+
+    public int size() {
+        return this.literalList.size();
+    }
+
+    public boolean isEmpty() {
+        return this.literalList.isEmpty();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        CNFClause cnfClause = (CNFClause) o;
+        return Objects.equals(literalList, cnfClause.literalList) && Objects.equals(positiveLiteralList, cnfClause.positiveLiteralList) && Objects.equals(negativeLiteralList, cnfClause.negativeLiteralList) && Objects.equals(predicateMap, cnfClause.predicateMap) && Objects.equals(constantMap, cnfClause.constantMap) && Objects.equals(variableMap, cnfClause.variableMap);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(literalList, positiveLiteralList, negativeLiteralList, this.toString());
     }
 }
