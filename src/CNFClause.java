@@ -4,9 +4,9 @@ import java.util.List;
 import java.util.Map;
 
 public class CNFClause {
-    private List<SingleLiteral> literals;
-    private List<SingleLiteral> positiveLiterals;
-    private List<SingleLiteral> negativeLiterals;
+    private List<SingleLiteral> literalList;
+    private List<SingleLiteral> positiveLiteralList;
+    private List<SingleLiteral> negativeLiteralList;
 
     private Map<String, Predicate> predicateMap;
 
@@ -14,18 +14,15 @@ public class CNFClause {
 
     private Map<String, Term> variableMap;
 
-    private String str;
-
     public  CNFClause() {
 
     }
 
     // Convert Implication sentence to CNF Clause
     public CNFClause(String str) {
-        this.str = str;
-        this.literals = new LinkedList<>();
-        this.positiveLiterals = new LinkedList<>();
-        this.negativeLiterals = new LinkedList<>();
+        this.literalList = new LinkedList<>();
+        this.positiveLiteralList = new LinkedList<>();
+        this.negativeLiteralList = new LinkedList<>();
         this.predicateMap = new HashMap<>();
         this.constantMap = new HashMap<>();
         this.variableMap = new HashMap<>();
@@ -65,17 +62,16 @@ public class CNFClause {
         addLiteral(conclusion);
 
         // Record Predicates, Constants and Variables
-        for (SingleLiteral literal: literals) {
+        for (SingleLiteral literal: literalList) {
             recordLiteral(literal);
         }
     }
 
     // Use a single literal as a Clause
     public CNFClause(SingleLiteral literal) {
-        this.str = literal.toString();
-        this.literals = new LinkedList<>();
-        this.positiveLiterals = new LinkedList<>();
-        this.negativeLiterals = new LinkedList<>();
+        this.literalList = new LinkedList<>();
+        this.positiveLiteralList = new LinkedList<>();
+        this.negativeLiteralList = new LinkedList<>();
         this.predicateMap = new HashMap<>();
         this.constantMap = new HashMap<>();
         this.variableMap = new HashMap<>();
@@ -84,16 +80,16 @@ public class CNFClause {
         recordLiteral(literal);
     }
 
-    public List<SingleLiteral> getLiterals() {
-        return literals;
+    public List<SingleLiteral> getLiteralList() {
+        return literalList;
     }
 
-    public List<SingleLiteral> getPositiveLiterals() {
-        return positiveLiterals;
+    public List<SingleLiteral> getPositiveLiteralList() {
+        return positiveLiteralList;
     }
 
-    public List<SingleLiteral> getNegativeLiterals() {
-        return negativeLiterals;
+    public List<SingleLiteral> getNegativeLiteralList() {
+        return negativeLiteralList;
     }
 
     public Map<String, Predicate> getPredicateMap() {
@@ -105,11 +101,11 @@ public class CNFClause {
     }
 
     private void addLiteral(SingleLiteral literal) {
-        this.literals.add(literal);
+        this.literalList.add(literal);
         if (literal.isPositive()) {
-            this.positiveLiterals.add(literal);
+            this.positiveLiteralList.add(literal);
         } else {
-            this.negativeLiterals.add(literal);
+            this.negativeLiteralList.add(literal);
         }
     }
 
@@ -140,6 +136,12 @@ public class CNFClause {
 
     @Override
     public String toString() {
-        return this.str;
+        StringBuffer sb = new StringBuffer();
+        for (SingleLiteral literal: literalList) {
+            sb.append(literal.toString());
+            sb.append(Operator.Disjunction.denotation);
+        }
+        sb.deleteCharAt(sb.length() - 1);
+        return sb.toString();
     }
 }
