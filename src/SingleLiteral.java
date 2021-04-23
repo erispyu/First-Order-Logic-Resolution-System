@@ -33,24 +33,28 @@ public class SingleLiteral{
         // Get the predicate's name
         predicateName = str.substring(predicateNameBeginIndex, predicateNameEndIndex);
 
+        // Split the args
         int argSize = 0;
         String args = str.substring(predicateNameEndIndex + 1, str.length() - 1);
         String[] termStrArr = args.split(",");
         argSize = termStrArr.length;
 
+        // parse the args into terms
+        parseTerms(termStrArr);
+
         // Construct a Predicate instance
         this.predicate = new Predicate(predicateName, argSize);
-    }
-
-    public boolean isPositive() {
-        return this.isPositive;
     }
 
     private void parseTerms(String[] termStrArr) {
         int termSize = termStrArr.length;
         this.terms = new Term[termSize];
         for (int i = 0; i < termSize; i++) {
-
+            terms[i] = new Term(termStrArr[i]);
         }
+    }
+
+    public boolean isPositive() {
+        return this.isPositive;
     }
 }
