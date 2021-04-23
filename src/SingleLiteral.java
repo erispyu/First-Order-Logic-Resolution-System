@@ -6,7 +6,11 @@ public class SingleLiteral{
 
     private boolean isPositive;
 
+    private String str;
+
     public SingleLiteral(String str) {
+        this.str = str;
+
         String predicateName;
         int predicateNameBeginIndex = -1;
         int predicateNameEndIndex = -1;
@@ -68,5 +72,15 @@ public class SingleLiteral{
 
     public void switchPositiveNegative() {
         this.isPositive = !this.isPositive;
+        if (!this.isPositive) {
+            this.str = Operator.Negation.denotation + this.str;
+        } else {
+            this.str = this.str.substring(1);
+        }
+    }
+
+    @Override
+    public String toString() {
+        return this.str;
     }
 }

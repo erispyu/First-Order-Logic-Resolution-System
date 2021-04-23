@@ -3,7 +3,7 @@ import java.util.List;
 public class Tester {
 
     public static void main(String[] args) {
-        run("TestCases/input4.txt", "TestOutputs/myOutput4.txt");
+        run("TestCases/input3.txt", "TestOutputs/myOutput3.txt");
     }
 
     private static void run(String inputFilePath, String outputFilePath) {

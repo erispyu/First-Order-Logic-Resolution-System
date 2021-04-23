@@ -27,6 +27,7 @@ public class KnowledgeBase {
 
     private void parseSingleLiteral(String str) {
         SingleLiteral literal = new SingleLiteral(str);
+        this.CFNClauseList.add(new CNFClause(literal));
 
         addPredicate(literal.getPredicate());
 
