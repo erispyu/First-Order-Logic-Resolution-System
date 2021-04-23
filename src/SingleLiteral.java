@@ -57,4 +57,16 @@ public class SingleLiteral{
     public boolean isPositive() {
         return this.isPositive;
     }
+
+    public Predicate getPredicate() {
+        return predicate;
+    }
+
+    public Term[] getTerms() {
+        return terms;
+    }
+
+    public void switchPositiveNegative() {
+        this.isPositive = !this.isPositive;
+    }
 }

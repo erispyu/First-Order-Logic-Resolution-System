@@ -3,16 +3,16 @@ public class Term {
 
     private String name;
 
-    public Term(String str) {
+    public Term(String name) {
         //Constant or Variable?
-        char c = str.charAt(0);
+        char c = name.charAt(0);
         if (c >= 'A' && c <= 'Z') {
             this.isConstant = true;
         } else {
             this.isConstant = false;
         }
 
-        this.name = str;
+        this.name = name;
     }
 
     public boolean isConstant() {

@@ -1,11 +1,20 @@
+import java.util.List;
+
 public class Tester {
 
     public static void main(String[] args) {
-        run("input.txt", "output.txt");
+        run("TestCases/input4.txt", "TestOutputs/myOutput4.txt");
     }
 
     private static void run(String inputFilePath, String outputFilePath) {
-        SingleLiteral literal = new SingleLiteral("Predicate(x,Tom,Y)");
+        InputData inputData = FileUtility.parseInput(inputFilePath);
+
+        List<SingleLiteral> queries = inputData.getQueries();
+        List<String> sentences = inputData.getSentences();
+
+        KnowledgeBase knowledgeBase = new KnowledgeBase(sentences);
+
+        FileUtility.generateOutput(outputFilePath, sentences);
     }
 
 }
