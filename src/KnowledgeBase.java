@@ -52,6 +52,10 @@ public class KnowledgeBase {
         CNFClause clause = new CNFClause(str);
         this.CFNClauseList.add(clause);
 
+        for (Predicate predicate: clause.getPredicateLiteralListMap().keySet()) {
+            mapPredicateCNFClause(predicate, clause);
+        }
+
         addConstantMap(clause.getConstantMap());
     }
 
