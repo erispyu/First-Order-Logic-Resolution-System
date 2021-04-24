@@ -122,6 +122,7 @@ public class CNFClause {
     }
 
     private void recordLiteral(SingleLiteral literal) {
+        // Add the literal to the lists
         this.literalList.add(literal);
         if (literal.isPositive()) {
             this.positiveLiteralList.add(literal);
@@ -129,8 +130,10 @@ public class CNFClause {
             this.negativeLiteralList.add(literal);
         }
 
+        // Record the literal's Predicate
         mapPredicateLiteral(literal.getPredicate(), literal);
 
+        // Record the literal's Terms
         Term[] terms = literal.getTerms();
         for (Term term: terms) {
             if (term.isConstant()) {

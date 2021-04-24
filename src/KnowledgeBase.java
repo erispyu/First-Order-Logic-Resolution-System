@@ -34,22 +34,16 @@ public class KnowledgeBase {
 
     private void parseSingleLiteral(String str) {
         SingleLiteral literal = new SingleLiteral(str);
-        Predicate predicate = literal.getPredicate();
         CNFClause clause = new CNFClause(literal);
-        this.CFNClauseList.add(clause);
-
-        mapPredicateCNFClause(predicate, clause);
-
-        Term[] terms = literal.getTerms();
-        for (Term term: terms) {
-            if (term.isConstant()) {
-                addConstant(term);
-            }
-        }
+        recordClause(clause);
     }
 
     private void parseImplication(String str) {
         CNFClause clause = new CNFClause(str);
+        recordClause(clause);
+    }
+
+    private void recordClause(CNFClause clause) {
         this.CFNClauseList.add(clause);
 
         for (Predicate predicate: clause.getPredicateLiteralListMap().keySet()) {
@@ -83,5 +77,9 @@ public class KnowledgeBase {
 
     public List<CNFClause> getCFNClauseList() {
         return CFNClauseList;
+    }
+
+    public Map<Predicate, List<CNFClause>> getPredicateCNFClauseListMap() {
+        return predicateCNFClauseListMap;
     }
 }
