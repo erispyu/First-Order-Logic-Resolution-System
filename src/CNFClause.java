@@ -68,6 +68,7 @@ public class CNFClause {
         recordLiteral(literal);
     }
 
+    // Init a CNFClause from a literal list, assuming connected by disjunction
     public CNFClause(List<SingleLiteral> lList) {
         this();
 
@@ -179,5 +180,11 @@ public class CNFClause {
     @Override
     public int hashCode() {
         return Objects.hash(this.toString());
+    }
+
+    // No need to deep copy each literal
+    public CNFClause getDeepCopy() {
+        CNFClause clause = new CNFClause(this.literalList);
+        return clause;
     }
 }

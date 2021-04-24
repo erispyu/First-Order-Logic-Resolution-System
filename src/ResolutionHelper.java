@@ -6,14 +6,17 @@ public class ResolutionHelper {
 
     public ResolutionHelper(SingleLiteral query, KnowledgeBase knowledgeBase) {
         this.query = query;
-        this.knowledgeBase = knowledgeBase;
+        this.knowledgeBase = knowledgeBase.getDeepCopy();
     }
 
     public boolean query() {
         boolean result = true;
-        knowledgeBase.addNegatedQuery(query);
-        //TODO: actually query
 
+        SingleLiteral negatedQuery = query.getNegation();
+
+        knowledgeBase.addClause(new CNFClause(negatedQuery));
+
+        //TODO: actually query
         return result;
     }
 }

@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 public class ResolutionUtility {
+
     public static CNFClause resolve(CNFClause c1, CNFClause c2, Map<Term, Term> substitution) {
         List<SingleLiteral> c1_literalList = c1.getLiteralList();
         List<SingleLiteral> c2_literalList = c2.getLiteralList();

@@ -10,13 +10,15 @@ public class KnowledgeBase {
 
     private Map<Predicate, List<CNFClause>> predicateCNFClauseListMap;
 
-    // Init the KB
-    public KnowledgeBase(List<String> sentences) {
+    public KnowledgeBase() {
         this.constantMap = new HashMap<>();
         this.CFNClauseList = new LinkedList<>();
-
         this.predicateCNFClauseListMap = new HashMap<>();
+    }
 
+    // Init the KB
+    public KnowledgeBase(List<String> sentences) {
+        this();
         for (String sentence: sentences) {
             if (sentence.contains(Operator.Implication.denotation)) {
                 parseImplication(sentence);
@@ -26,10 +28,8 @@ public class KnowledgeBase {
         }
     }
 
-    // Add the negation of the Query
-    public void addNegatedQuery(SingleLiteral query) {
-        SingleLiteral negatedQuery = new SingleLiteral(query, true);
-        this.CFNClauseList.add(new CNFClause(negatedQuery));
+    public void addClause(CNFClause clause) {
+        recordClause(clause);
     }
 
     private void parseSingleLiteral(String str) {
@@ -81,5 +81,13 @@ public class KnowledgeBase {
 
     public Map<Predicate, List<CNFClause>> getPredicateCNFClauseListMap() {
         return predicateCNFClauseListMap;
+    }
+
+    public KnowledgeBase getDeepCopy() {
+        KnowledgeBase copy = new KnowledgeBase();
+        for(CNFClause clause: this.CFNClauseList) {
+            copy.addClause(clause.getDeepCopy());
+        }
+        return copy;
     }
 }

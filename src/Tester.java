@@ -6,7 +6,7 @@ public class Tester {
 
     public static void main(String[] args) {
         run("TestCases/input4.txt", "TestOutputs/myOutput4.txt");
-        testClauseInitByList();
+//        testClauseInitByList();
     }
 
     private static void run(String inputFilePath, String outputFilePath) {
