@@ -82,6 +82,10 @@ public class SingleLiteral{
         return terms;
     }
 
+    public void setTerms(Term[] terms) {
+        this.terms = terms;
+    }
+
     public void switchPositiveNegative() {
         this.isPositive = !this.isPositive;
         if (!this.isPositive) {
@@ -89,6 +93,10 @@ public class SingleLiteral{
         } else {
             this.str = this.str.substring(1);
         }
+    }
+
+    public SingleLiteral negated() {
+        return new SingleLiteral(this, true);
     }
 
     @Override

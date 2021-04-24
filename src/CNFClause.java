@@ -82,6 +82,27 @@ public class CNFClause {
         recordLiteral(literal);
     }
 
+    public CNFClause(List<SingleLiteral> lList) {
+        this.literalList = new LinkedList<>();
+        this.positiveLiteralList = new LinkedList<>();
+        this.negativeLiteralList = new LinkedList<>();
+        this.predicateMap = new HashMap<>();
+        this.constantMap = new HashMap<>();
+        this.variableMap = new HashMap<>();
+
+        Map<String, SingleLiteral> literalMap = new HashMap<>();
+
+        for (SingleLiteral literal: lList) {
+            SingleLiteral negated = literal.negated();
+            if (literalMap.containsKey(negated.toString())) {
+                continue;
+            }
+            literalMap.put(literal.toString(), literal);
+            addLiteral(literal);
+            recordLiteral(literal);
+        }
+    }
+
     public List<SingleLiteral> getLiteralList() {
         return literalList;
     }
