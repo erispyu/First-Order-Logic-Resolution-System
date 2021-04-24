@@ -5,23 +5,20 @@ public class CNFClause {
     private List<SingleLiteral> positiveLiteralList;
     private List<SingleLiteral> negativeLiteralList;
 
-    private Map<String, Predicate> predicateMap;
-
     private Map<String, Term> constantMap;
 
     private Map<String, Term> variableMap;
 
-    private Map<Predicate, List<SingleLiteral>> predicateLiteralMap;
+    private Map<Predicate, List<SingleLiteral>> predicateLiteralListMap;
 
     public CNFClause() {
         this.literalList = new LinkedList<>();
         this.positiveLiteralList = new LinkedList<>();
         this.negativeLiteralList = new LinkedList<>();
-        this.predicateMap = new HashMap<>();
         this.constantMap = new HashMap<>();
         this.variableMap = new HashMap<>();
 
-        this.predicateLiteralMap = new HashMap<>();
+        this.predicateLiteralListMap = new HashMap<>();
     }
 
     // Convert Implication sentence to CNF Clause
@@ -57,22 +54,17 @@ public class CNFClause {
         // 5. Drop universal quantifiers, skipped
 
         // 6. Distribute V over ^
-        for (SingleLiteral premise: premiseList) {
-            addLiteral(premise);
-        }
-        addLiteral(conclusion);
 
-        // Record Predicates, Constants and Variables
-        for (SingleLiteral literal: literalList) {
-            recordLiteral(literal);
+        // Record Predicates, Constants and Variables in each literal
+        for (SingleLiteral premise: premiseList) {
+            recordLiteral(premise);
         }
+        recordLiteral(conclusion);
     }
 
     // Use a single literal as a Clause
     public CNFClause(SingleLiteral literal) {
         this();
-
-        addLiteral(literal);
         recordLiteral(literal);
     }
 
@@ -87,7 +79,6 @@ public class CNFClause {
                 continue;
             }
             literalMap.put(literal.toString(), literal);
-            addLiteral(literal);
             recordLiteral(literal);
         }
     }
@@ -104,35 +95,22 @@ public class CNFClause {
         return negativeLiteralList;
     }
 
-    public Map<String, Predicate> getPredicateMap() {
-        return predicateMap;
+    public Map<Predicate, List<SingleLiteral>> getPredicateLiteralListMap() {
+        return predicateLiteralListMap;
     }
 
     public Map<String, Term> getConstantMap() {
         return constantMap;
     }
 
-    private void addLiteral(SingleLiteral literal) {
-        this.literalList.add(literal);
-        if (literal.isPositive()) {
-            this.positiveLiteralList.add(literal);
-        } else {
-            this.negativeLiteralList.add(literal);
-        }
-
-        Predicate predicate = literal.getPredicate();
-
-        if(this.predicateLiteralMap.containsKey(predicate)) {
-            this.predicateLiteralMap.get(predicate).add(literal);
+    private void mapPredicateLiteral(Predicate predicate, SingleLiteral literal) {
+        if(this.predicateLiteralListMap.containsKey(predicate)) {
+            this.predicateLiteralListMap.get(predicate).add(literal);
         } else {
             List<SingleLiteral> literalList = new LinkedList<>();
             literalList.add(literal);
-            this.predicateLiteralMap.put(predicate, literalList);
+            this.predicateLiteralListMap.put(predicate, literalList);
         }
-    }
-
-    private void addPredicate(Predicate predicate) {
-        this.predicateMap.put(predicate.getName(), predicate);
     }
 
     private void addConstant(Term constant) {
@@ -144,7 +122,14 @@ public class CNFClause {
     }
 
     private void recordLiteral(SingleLiteral literal) {
-        addPredicate(literal.getPredicate());
+        this.literalList.add(literal);
+        if (literal.isPositive()) {
+            this.positiveLiteralList.add(literal);
+        } else {
+            this.negativeLiteralList.add(literal);
+        }
+
+        mapPredicateLiteral(literal.getPredicate(), literal);
 
         Term[] terms = literal.getTerms();
         for (Term term: terms) {
@@ -184,12 +169,12 @@ public class CNFClause {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        CNFClause cnfClause = (CNFClause) o;
-        return Objects.equals(literalList, cnfClause.literalList) && Objects.equals(positiveLiteralList, cnfClause.positiveLiteralList) && Objects.equals(negativeLiteralList, cnfClause.negativeLiteralList) && Objects.equals(predicateMap, cnfClause.predicateMap) && Objects.equals(constantMap, cnfClause.constantMap) && Objects.equals(variableMap, cnfClause.variableMap);
+        CNFClause clause = (CNFClause) o;
+        return Objects.equals(this.toString(), clause.toString());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(literalList, positiveLiteralList, negativeLiteralList, this.toString());
+        return Objects.hash(this.toString());
     }
 }

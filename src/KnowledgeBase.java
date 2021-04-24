@@ -4,18 +4,18 @@ import java.util.List;
 import java.util.Map;
 
 public class KnowledgeBase {
-
-    private Map<String, Predicate> predicateMap;
-
     private Map<String, Term> constantMap;
 
     private List<CNFClause> CFNClauseList;
 
+    private Map<Predicate, List<CNFClause>> predicateCNFClauseListMap;
+
     // Init the KB
     public KnowledgeBase(List<String> sentences) {
-        this.predicateMap = new HashMap<>();
         this.constantMap = new HashMap<>();
         this.CFNClauseList = new LinkedList<>();
+
+        this.predicateCNFClauseListMap = new HashMap<>();
 
         for (String sentence: sentences) {
             if (sentence.contains(Operator.Implication.denotation)) {
@@ -34,9 +34,11 @@ public class KnowledgeBase {
 
     private void parseSingleLiteral(String str) {
         SingleLiteral literal = new SingleLiteral(str);
-        this.CFNClauseList.add(new CNFClause(literal));
+        Predicate predicate = literal.getPredicate();
+        CNFClause clause = new CNFClause(literal);
+        this.CFNClauseList.add(clause);
 
-        addPredicate(literal.getPredicate());
+        mapPredicateCNFClause(predicate, clause);
 
         Term[] terms = literal.getTerms();
         for (Term term: terms) {
@@ -49,16 +51,18 @@ public class KnowledgeBase {
     private void parseImplication(String str) {
         CNFClause clause = new CNFClause(str);
         this.CFNClauseList.add(clause);
-        addPredicateMap(clause.getPredicateMap());
+
         addConstantMap(clause.getConstantMap());
     }
 
-    private void addPredicate(Predicate predicate) {
-        this.predicateMap.put(predicate.getName(), predicate);
-    }
-
-    private void addPredicateMap(Map<String, Predicate> predicateMap) {
-        this.predicateMap.putAll(predicateMap);
+    private void mapPredicateCNFClause(Predicate predicate, CNFClause clause) {
+        if (this.predicateCNFClauseListMap.containsKey(predicate)) {
+            this.predicateCNFClauseListMap.get(predicate).add(clause);
+        } else {
+            List<CNFClause> clauseList = new LinkedList<>();
+            clauseList.add(clause);
+            this.predicateCNFClauseListMap.put(predicate, clauseList);
+        }
     }
 
     private void addConstant(Term constant) {

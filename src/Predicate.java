@@ -32,6 +32,6 @@ public class Predicate {
 
     @Override
     public String toString() {
-        return this.name + "(argSize=" + this.argSize + ")";
+        return this.name + "(), argSize=" + this.argSize;
     }
 }
