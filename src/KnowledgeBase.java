@@ -6,13 +6,13 @@ import java.util.Map;
 public class KnowledgeBase {
     private Map<String, Term> constantMap;
 
-    private List<CNFClause> CFNClauseList;
+    private Map<String, CNFClause> CFNClauseMap;
 
     private Map<Predicate, List<CNFClause>> predicateCNFClauseListMap;
 
     public KnowledgeBase() {
         this.constantMap = new HashMap<>();
-        this.CFNClauseList = new LinkedList<>();
+        this.CFNClauseMap = new HashMap<>();
         this.predicateCNFClauseListMap = new HashMap<>();
     }
 
@@ -44,7 +44,7 @@ public class KnowledgeBase {
     }
 
     private void recordClause(CNFClause clause) {
-        this.CFNClauseList.add(clause);
+        this.CFNClauseMap.put(clause.toString(), clause);
 
         for (Predicate predicate: clause.getPredicateLiteralListMap().keySet()) {
             mapPredicateCNFClause(predicate, clause);
@@ -71,12 +71,8 @@ public class KnowledgeBase {
         this.constantMap.putAll(constantMap);
     }
 
-    private void addCNFClause(CNFClause clause) {
-        this.CFNClauseList.add(clause);
-    }
-
-    public List<CNFClause> getCFNClauseList() {
-        return CFNClauseList;
+    public Map<String, CNFClause> getCFNClauseMap() {
+        return CFNClauseMap;
     }
 
     public Map<Predicate, List<CNFClause>> getPredicateCNFClauseListMap() {
@@ -85,7 +81,7 @@ public class KnowledgeBase {
 
     public KnowledgeBase getDeepCopy() {
         KnowledgeBase copy = new KnowledgeBase();
-        for(CNFClause clause: this.CFNClauseList) {
+        for(CNFClause clause: this.CFNClauseMap.values()) {
             copy.addClause(clause.getDeepCopy());
         }
         return copy;

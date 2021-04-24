@@ -73,14 +73,14 @@ public class CNFClause {
         this();
 
         Map<String, SingleLiteral> literalMap = new HashMap<>();
-
         for (SingleLiteral literal: lList) {
             SingleLiteral negation = literal.getNegation();
             if (literalMap.containsKey(negation.toString())) {
                 continue;
+            } else {
+                literalMap.put(literal.toString(), literal);
+                recordLiteral(literal);
             }
-            literalMap.put(literal.toString(), literal);
-            recordLiteral(literal);
         }
     }
 
@@ -149,7 +149,7 @@ public class CNFClause {
     @Override
     public String toString() {
         if (isEmpty()) {
-            return "Empty";
+            return "isEmpty";
         }
 
         StringBuffer sb = new StringBuffer();
@@ -167,6 +167,10 @@ public class CNFClause {
 
     public boolean isEmpty() {
         return this.literalList.isEmpty();
+    }
+
+    public boolean isUnit() {
+        return (this.literalList.size() == 1);
     }
 
     @Override

@@ -10,13 +10,15 @@ public class ResolutionHelper {
     }
 
     public boolean query() {
-        boolean result = true;
+        boolean result = false;
 
         SingleLiteral negatedQuery = query.getNegation();
 
         knowledgeBase.addClause(new CNFClause(negatedQuery));
 
-        //TODO: actually query
+        //TODO: do the resolution
+
+
         return result;
     }
 }

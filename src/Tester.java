@@ -5,8 +5,11 @@ import java.util.Map;
 public class Tester {
 
     public static void main(String[] args) {
-        run("TestCases/input4.txt", "TestOutputs/myOutput4.txt");
-//        testClauseInitByList();
+//        run("TestCases/input4.txt", "TestOutputs/my_output4.txt");
+
+        testClauseInitByList();
+
+        testClauseInitByString();
     }
 
     private static void run(String inputFilePath, String outputFilePath) {
@@ -34,11 +37,17 @@ public class Tester {
         SingleLiteral l3 = new SingleLiteral("Healthy(Alice)");
 
         List<SingleLiteral> lList = new LinkedList<>();
-        lList.add(l1);
-        lList.add(l2);
-        lList.add(l3);
+//        lList.add(l1);
+//        lList.add(l2);
+//        lList.add(l3);
 
         CNFClause clause = new CNFClause(lList);
+        System.out.println(clause);
+    }
+
+    private static void testClauseInitByString() {
+        String str = "~Play(x,y) & Fun(x) => Happy(y)";
+        CNFClause clause = new CNFClause(str);
         System.out.println(clause);
     }
 }
