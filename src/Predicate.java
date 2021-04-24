@@ -29,4 +29,9 @@ public class Predicate {
     public int hashCode() {
         return Objects.hash(name, argSize);
     }
+
+    @Override
+    public String toString() {
+        return this.name + "(argSize=" + this.argSize + ")";
+    }
 }

@@ -11,6 +11,8 @@ public class CNFClause {
 
     private Map<String, Term> variableMap;
 
+    private Map<Predicate, List<SingleLiteral>> predicateLiteralMap;
+
     public CNFClause() {
         this.literalList = new LinkedList<>();
         this.positiveLiteralList = new LinkedList<>();
@@ -18,6 +20,8 @@ public class CNFClause {
         this.predicateMap = new HashMap<>();
         this.constantMap = new HashMap<>();
         this.variableMap = new HashMap<>();
+
+        this.predicateLiteralMap = new HashMap<>();
     }
 
     // Convert Implication sentence to CNF Clause
@@ -28,6 +32,8 @@ public class CNFClause {
         this.predicateMap = new HashMap<>();
         this.constantMap = new HashMap<>();
         this.variableMap = new HashMap<>();
+
+        this.predicateLiteralMap = new HashMap<>();
 
         // 1. Eliminate implications
         List<SingleLiteral> premiseList = new LinkedList<>();
@@ -78,6 +84,8 @@ public class CNFClause {
         this.constantMap = new HashMap<>();
         this.variableMap = new HashMap<>();
 
+        this.predicateLiteralMap = new HashMap<>();
+
         addLiteral(literal);
         recordLiteral(literal);
     }
@@ -89,6 +97,8 @@ public class CNFClause {
         this.predicateMap = new HashMap<>();
         this.constantMap = new HashMap<>();
         this.variableMap = new HashMap<>();
+
+        this.predicateLiteralMap = new HashMap<>();
 
         Map<String, SingleLiteral> literalMap = new HashMap<>();
 
@@ -129,6 +139,16 @@ public class CNFClause {
             this.positiveLiteralList.add(literal);
         } else {
             this.negativeLiteralList.add(literal);
+        }
+
+        Predicate predicate = literal.getPredicate();
+
+        if(this.predicateLiteralMap.containsKey(predicate)) {
+            this.predicateLiteralMap.get(predicate).add(literal);
+        } else {
+            List<SingleLiteral> literalList = new LinkedList<>();
+            literalList.add(literal);
+            this.predicateLiteralMap.put(predicate, literalList);
         }
     }
 

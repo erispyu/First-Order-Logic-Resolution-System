@@ -4,7 +4,18 @@ import java.util.List;
 public class Tester {
 
     public static void main(String[] args) {
-        run("TestCases/input4.txt", "TestOutputs/myOutput4.txt");
+//        run("TestCases/input4.txt", "TestOutputs/myOutput4.txt");
+        SingleLiteral l1 = new SingleLiteral("Healthy(Teddy)");
+        SingleLiteral l2 = new SingleLiteral("~Healthy(x)");
+        SingleLiteral l3 = new SingleLiteral("Healthy(Alice)");
+
+        List<SingleLiteral> lList = new LinkedList<>();
+        lList.add(l1);
+        lList.add(l2);
+        lList.add(l3);
+
+        CNFClause clause = new CNFClause(lList);
+        System.out.println(clause);
     }
 
     private static void run(String inputFilePath, String outputFilePath) {
