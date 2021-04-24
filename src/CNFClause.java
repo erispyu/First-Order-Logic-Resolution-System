@@ -26,14 +26,7 @@ public class CNFClause {
 
     // Convert Implication sentence to CNF Clause
     public CNFClause(String str) {
-        this.literalList = new LinkedList<>();
-        this.positiveLiteralList = new LinkedList<>();
-        this.negativeLiteralList = new LinkedList<>();
-        this.predicateMap = new HashMap<>();
-        this.constantMap = new HashMap<>();
-        this.variableMap = new HashMap<>();
-
-        this.predicateLiteralMap = new HashMap<>();
+        this();
 
         // 1. Eliminate implications
         List<SingleLiteral> premiseList = new LinkedList<>();
@@ -52,7 +45,7 @@ public class CNFClause {
             premiseList.add(premise);
         }
 
-        // 2. Move the negated quantifiers(~) inwards
+        // 2. Move the getNegation quantifiers(~) inwards
         for (SingleLiteral premise: premiseList) {
             premise.switchPositiveNegative();
         }
@@ -77,34 +70,20 @@ public class CNFClause {
 
     // Use a single literal as a Clause
     public CNFClause(SingleLiteral literal) {
-        this.literalList = new LinkedList<>();
-        this.positiveLiteralList = new LinkedList<>();
-        this.negativeLiteralList = new LinkedList<>();
-        this.predicateMap = new HashMap<>();
-        this.constantMap = new HashMap<>();
-        this.variableMap = new HashMap<>();
-
-        this.predicateLiteralMap = new HashMap<>();
+        this();
 
         addLiteral(literal);
         recordLiteral(literal);
     }
 
     public CNFClause(List<SingleLiteral> lList) {
-        this.literalList = new LinkedList<>();
-        this.positiveLiteralList = new LinkedList<>();
-        this.negativeLiteralList = new LinkedList<>();
-        this.predicateMap = new HashMap<>();
-        this.constantMap = new HashMap<>();
-        this.variableMap = new HashMap<>();
-
-        this.predicateLiteralMap = new HashMap<>();
+        this();
 
         Map<String, SingleLiteral> literalMap = new HashMap<>();
 
         for (SingleLiteral literal: lList) {
-            SingleLiteral negated = literal.negated();
-            if (literalMap.containsKey(negated.toString())) {
+            SingleLiteral negation = literal.getNegation();
+            if (literalMap.containsKey(negation.toString())) {
                 continue;
             }
             literalMap.put(literal.toString(), literal);

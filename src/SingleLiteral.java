@@ -95,7 +95,7 @@ public class SingleLiteral{
         }
     }
 
-    public SingleLiteral negated() {
+    public SingleLiteral getNegation() {
         return new SingleLiteral(this, true);
     }
 

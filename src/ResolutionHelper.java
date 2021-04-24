@@ -12,7 +12,6 @@ public class ResolutionHelper {
     public boolean query() {
         boolean result = true;
         knowledgeBase.addNegatedQuery(query);
-
         //TODO: actually query
 
         return result;
