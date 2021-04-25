@@ -3,7 +3,7 @@ import java.util.*;
 public class Tester {
 
     public static void main(String[] args) {
-        run("TestCases/test_input_3.txt", "TestOutputs/my_output1.txt");
+        run("TestCases/input4.txt", "TestOutputs/my_output1.txt");
 
 //        testClauseInitByList();
 

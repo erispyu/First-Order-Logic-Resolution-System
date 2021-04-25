@@ -103,7 +103,7 @@ public class SingleLiteral{
         sb.append(predicate.getName());
         sb.append("(");
         for (Term term: terms) {
-            sb.append(term.getName());
+            sb.append(term.getOriginName());
             sb.append(",");
         }
         sb.deleteCharAt(sb.length() - 1);

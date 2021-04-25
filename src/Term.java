@@ -5,6 +5,8 @@ public class Term {
 
     private String name;
 
+    private String originName;
+
     public Term(String name) {
         //Constant or Variable?
         char c = name.charAt(0);
@@ -15,6 +17,7 @@ public class Term {
         }
 
         this.name = name;
+        this.originName = name;
     }
 
     public boolean isConstant() {
@@ -29,9 +32,13 @@ public class Term {
         return this.name;
     }
 
+    public String getOriginName() {
+        return this.originName;
+    }
+
     public void hashName(int hashCode) {
         if (this.name.contains("_")) {
-            String originName = this.name.split("_")[0];
+            originName = this.name.split("_")[0];
             this.name = originName + "_" + hashCode;
         } else {
             this.name = this.name + "_" + hashCode;

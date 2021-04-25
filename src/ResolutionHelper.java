@@ -9,6 +9,8 @@ public class ResolutionHelper {
 
     private Map<String, CNFClause> originalClauseMap;
 
+    private PriorityQueue<CNFClause> originClausePQ;
+    private Set<CNFClause> generatedClauseSet;
     private PriorityQueue<CNFClause> copiedClausePQ;
 
     public ResolutionHelper(SingleLiteral query, KnowledgeBase knowledgeBase) {
@@ -20,7 +22,9 @@ public class ResolutionHelper {
 
         this.originalClauseMap = knowledgeBase.getClauseMap();
 
-        this.copiedClausePQ = new PriorityQueue<>(knowledgeBase.getClausePQ());
+        this.originClausePQ = new PriorityQueue<>(knowledgeBase.getClausePQ());
+        this.generatedClauseSet = new HashSet<>();
+        copiedClausePQ = new PriorityQueue<>(knowledgeBase.getClausePQ());
     }
 
     public boolean query() {
@@ -36,42 +40,62 @@ public class ResolutionHelper {
         }
 
         // Add the negated query to the KB
-        recordGeneratedClause(negatedQueryClause);
+        recordClauseToKB(negatedQueryClause);
 
-        // input solution
-        while(!copiedClausePQ.isEmpty()) {
-            CNFClause clauseToResolve = copiedClausePQ.poll();
-            for (Predicate predicate: clauseToResolve.getPredicateSet()) {
-                PriorityQueue<CNFClause> matchedClauses = new PriorityQueue<>(knowledgeBase.getPredicateClausePQMap().get(predicate));
+        while(true) {
+            // for each pair of clauses in the KB, do resolution
+            Set<CNFClause> visited = new HashSet<>();
+            while(!copiedClausePQ.isEmpty()) {
+                CNFClause clauseToResolve = copiedClausePQ.poll();
+                visited.add(clauseToResolve);
+                for (Predicate predicate : clauseToResolve.getPredicateSet()) {
+                    PriorityQueue<CNFClause> matchedClauses = new PriorityQueue<>(knowledgeBase.getPredicateClausePQMap().get(predicate));
 
-                while(!matchedClauses.isEmpty()) {
-                    CNFClause matched = matchedClauses.poll();
-                    if (clauseToResolve == matched) continue;
+                    while(!matchedClauses.isEmpty()) {
+                        CNFClause matched = matchedClauses.poll();
+                        if (visited.contains(matched)) continue;
 
-                    CNFClause resolventClause = ResolutionUtility.resolve(clauseToResolve, matched, predicate);
-                    if (resolventClause == null) continue;
+                        // Try unit resolution
+                        if (!clauseToResolve.isUnit() && !matched.isUnit()) continue;
 
-                    System.out.println("Resolve: " + clauseToResolve + " and " + matched);
-                    System.out.println("Resolvent: " + resolventClause);
-                    System.out.println("-----------------------------------------------");
+                        CNFClause resolventClause = ResolutionUtility.resolve(clauseToResolve, matched, predicate);
+                        if (resolventClause == null) continue;
 
-                    if (knowledgeBase.containsClause(resolventClause)) {
-                        // loop proof, return false
-                        return false;
-                    } else if (resolventClause.isEmpty()) {
-                        // contradiction found!
-                        return true;
-                    } else {
-                        recordGeneratedClause(resolventClause);
+//                        System.out.println("Resolve: " + clauseToResolve + " and " + matched);
+//                        System.out.println("Resolvent: " + resolventClause);
+//                        System.out.println("-----------------------------------------------");
+
+                        if (resolventClause.isEmpty()) {
+                            // contradiction found!
+                            return true;
+                        } else {
+                            generatedClauseSet.add(resolventClause);
+                        }
                     }
                 }
             }
+
+            // recover copied clauses
+            copiedClausePQ.addAll(knowledgeBase.getClausePQ());
+
+            // handle generated clauses
+            boolean hasNewClause = false;
+            for(CNFClause generatedClause: generatedClauseSet) {
+                if (knowledgeBase.containsClause(generatedClause)) {
+                    continue;
+                } else {
+                    hasNewClause = true;
+                    recordClauseToKB(generatedClause);
+                }
+            }
+            if (!hasNewClause) {
+                return false;
+            }
         }
-        return false;
     }
 
-    private void recordGeneratedClause(CNFClause clause) {
+    private void recordClauseToKB(CNFClause clause) {
         knowledgeBase.recordClause(clause);
-        this.copiedClausePQ.add(clause);
+        copiedClausePQ.add(clause);
     }
 }
