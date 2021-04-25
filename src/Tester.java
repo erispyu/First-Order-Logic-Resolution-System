@@ -3,7 +3,7 @@ import java.util.*;
 public class Tester {
 
     public static void main(String[] args) {
-//        run("TestCases/test_input_1.txt", "TestOutputs/my_output1.txt");
+        run("TestCases/test_input_1.txt", "TestOutputs/my_output1.txt");
 
 //        testClauseInitByList();
 
@@ -13,7 +13,7 @@ public class Tester {
 
 //        testResolve();
 
-        testGetUnifiedLiteral();
+//        testGetUnifiedLiteral();
     }
 
     private static void run(String inputFilePath, String outputFilePath) {

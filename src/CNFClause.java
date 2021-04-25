@@ -30,6 +30,7 @@ public class CNFClause implements Comparable<CNFClause>{
         if (!str.contains(Operator.Implication.denotation)) {
             SingleLiteral literal = new SingleLiteral(str);
             recordLiteral(literal);
+            standardize();
             return;
         }
 
@@ -69,12 +70,14 @@ public class CNFClause implements Comparable<CNFClause>{
             recordLiteral(premise);
         }
         recordLiteral(conclusion);
+        standardize();
     }
 
     // Use a single literal as a Clause
     public CNFClause(SingleLiteral literal) {
         this();
         recordLiteral(literal);
+        standardize();
     }
 
     // Init a CNFClause from a literal list, assuming connected by disjunction
@@ -91,6 +94,7 @@ public class CNFClause implements Comparable<CNFClause>{
                 recordLiteral(literal);
             }
         }
+        standardize();
     }
 
     public List<SingleLiteral> getLiteralList() {
@@ -131,6 +135,18 @@ public class CNFClause implements Comparable<CNFClause>{
         this.variableMap.put(variable.getName(), variable);
     }
 
+    private boolean containsTerm(Term term) {
+        return this.constantMap.containsKey(term.getName()) || this.variableMap.containsKey(term.getName());
+    }
+
+    private Term getTerm(String termName) {
+        if (constantMap.containsKey(termName)) {
+            return constantMap.get(termName);
+        } else {
+            return variableMap.get(termName);
+        }
+    }
+
     private void recordLiteral(SingleLiteral literal) {
         // Add the literal to the lists
         this.literalList.add(literal);
@@ -145,12 +161,15 @@ public class CNFClause implements Comparable<CNFClause>{
 
         // Record the literal's Terms
         Term[] terms = literal.getTerms();
-        for (Term term: terms) {
-            if (term.isConstant()) {
-                addConstant(term);
+        for (int i = 0; i < terms.length; i++) {
+            if (containsTerm(terms[i])) {
+                terms[i] = getTerm(terms[i].getName());
             } else {
-                term.hashName(this.hashCode());
-                addVariable(term);
+                if (terms[i].isConstant()) {
+                    addConstant(terms[i]);
+                } else {
+                    addVariable(terms[i]);
+                }
             }
         }
     }
@@ -212,5 +231,11 @@ public class CNFClause implements Comparable<CNFClause>{
 
     public List<SingleLiteral> getMatchedLiterals(Predicate predicate) {
         return this.predicateLiteralListMap.get(predicate);
+    }
+
+    private void standardize() {
+        for (Term variable: variableMap.values()) {
+            variable.hashName(hashCode());
+        }
     }
 }
