@@ -5,15 +5,15 @@ public class KnowledgeBase {
 
     private Map<String, CNFClause> clauseMap;
 
-    private Map<Predicate, List<CNFClause>> predicateClauseListMap;
+    private Map<Predicate, PriorityQueue<CNFClause>> predicateClausePQMap;
 
-    private PriorityQueue<CNFClause> clausePriorityQueue;
+    private PriorityQueue<CNFClause> clausePQ;
 
     public KnowledgeBase() {
         this.constantMap = new HashMap<>();
         this.clauseMap = new HashMap<>();
-        this.predicateClauseListMap = new HashMap<>();
-        this.clausePriorityQueue = new PriorityQueue<>();
+        this.predicateClausePQMap = new HashMap<>();
+        this.clausePQ = new PriorityQueue<>();
     }
 
     // Init the KB
@@ -27,7 +27,7 @@ public class KnowledgeBase {
 
     public void recordClause(CNFClause clause) {
         this.clauseMap.put(clause.toString(), clause);
-        this.clausePriorityQueue.add(clause);
+        this.clausePQ.add(clause);
 
         for (Predicate predicate: clause.getPredicateLiteralListMap().keySet()) {
             mapPredicateClause(predicate, clause);
@@ -37,12 +37,12 @@ public class KnowledgeBase {
     }
 
     private void mapPredicateClause(Predicate predicate, CNFClause clause) {
-        if (this.predicateClauseListMap.containsKey(predicate)) {
-            this.predicateClauseListMap.get(predicate).add(clause);
+        if (this.predicateClausePQMap.containsKey(predicate)) {
+            this.predicateClausePQMap.get(predicate).add(clause);
         } else {
-            List<CNFClause> clauseList = new LinkedList<>();
-            clauseList.add(clause);
-            this.predicateClauseListMap.put(predicate, clauseList);
+            PriorityQueue<CNFClause> clausePriorityQueue = new PriorityQueue<>();
+            clausePriorityQueue.add(clause);
+            this.predicateClausePQMap.put(predicate, clausePriorityQueue);
         }
     }
 
@@ -58,12 +58,12 @@ public class KnowledgeBase {
         return clauseMap;
     }
 
-    public Map<Predicate, List<CNFClause>> getPredicateClauseListMap() {
-        return predicateClauseListMap;
+    public Map<Predicate, PriorityQueue<CNFClause>> getPredicateClausePQMap() {
+        return predicateClausePQMap;
     }
 
-    public PriorityQueue<CNFClause> getClausePriorityQueue() {
-        return clausePriorityQueue;
+    public PriorityQueue<CNFClause> getClausePQ() {
+        return clausePQ;
     }
 
     public KnowledgeBase getDeepCopy() {

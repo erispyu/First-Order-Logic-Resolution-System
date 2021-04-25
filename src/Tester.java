@@ -3,13 +3,13 @@ import java.util.*;
 public class Tester {
 
     public static void main(String[] args) {
-//        run("TestCases/input4.txt", "TestOutputs/my_output4.txt");
+        run("TestCases/test_input_1.txt", "TestOutputs/my_output4.txt");
 
 //        testClauseInitByList();
 
 //        testClauseInitByString();
 
-        testClauseWeight("TestCases/input4.txt");
+//        testClauseWeight("TestCases/input4.txt");
     }
 
     private static void run(String inputFilePath, String outputFilePath) {
@@ -23,8 +23,8 @@ public class Tester {
         List<String> results = new LinkedList<>();
 
         for (SingleLiteral query: queries) {
-            ResolutionHelper resolutionHelper = new ResolutionHelper(query, knowledgeBase);
-            boolean result = resolutionHelper.query();
+            QueryHelper queryHelper = new QueryHelper(query, knowledgeBase);
+            boolean result = queryHelper.query();
             results.add(Boolean.toString(result).toUpperCase());
         }
 
@@ -58,7 +58,7 @@ public class Tester {
 
         KnowledgeBase knowledgeBase = new KnowledgeBase(sentences);
 
-        PriorityQueue<CNFClause> clausePriorityQueue = knowledgeBase.getClausePriorityQueue();
+        PriorityQueue<CNFClause> clausePriorityQueue = knowledgeBase.getClausePQ();
 
         while(!clausePriorityQueue.isEmpty()) {
             System.out.println(clausePriorityQueue.poll().size());
