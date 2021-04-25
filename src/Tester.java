@@ -32,8 +32,6 @@ public class Tester {
             ResolutionHelper resolutionHelper = new ResolutionHelper(query, knowledgeBase);
             boolean result = resolutionHelper.query();
 
-            System.out.println(Boolean.toString(result).toUpperCase());
-
             results.add(Boolean.toString(result).toUpperCase());
         }
 
