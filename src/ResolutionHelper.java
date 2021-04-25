@@ -38,20 +38,24 @@ public class ResolutionHelper {
         // Add the negated query to the KB
         recordGeneratedClause(negatedQueryClause);
 
-        // linear resolution: either one clause is in the original jb, or the other is newly generated.
+        // input solution
         while(!copiedClausePQ.isEmpty()) {
             CNFClause clauseToResolve = copiedClausePQ.poll();
             for (Predicate predicate: clauseToResolve.getPredicateSet()) {
                 PriorityQueue<CNFClause> matchedClauses = new PriorityQueue<>(knowledgeBase.getPredicateClausePQMap().get(predicate));
+
                 while(!matchedClauses.isEmpty()) {
                     CNFClause matched = matchedClauses.poll();
-                    if (clauseToResolve == matched) {
-                        continue;
-                    }
+                    if (clauseToResolve == matched) continue;
+
                     CNFClause resolventClause = ResolutionUtility.resolve(clauseToResolve, matched, predicate);
-                    if (resolventClause == null) {
-                        continue;
-                    } else if (knowledgeBase.containsClause(resolventClause)) {
+                    if (resolventClause == null) continue;
+
+                    System.out.println("Resolve: " + clauseToResolve + " and " + matched);
+                    System.out.println("Resolvent: " + resolventClause);
+                    System.out.println("-----------------------------------------------");
+
+                    if (knowledgeBase.containsClause(resolventClause)) {
                         // loop proof, return false
                         return false;
                     } else if (resolventClause.isEmpty()) {

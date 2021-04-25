@@ -1,5 +1,5 @@
 1
-Start(Hayley)
+Play(Hayley,Teddy)
 6
 Vaccinated(x) => Start(x)
 Start(x) & Healthy(x) => Ready(x)
