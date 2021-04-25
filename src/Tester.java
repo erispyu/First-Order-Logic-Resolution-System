@@ -3,13 +3,13 @@ import java.util.*;
 public class Tester {
 
     public static void main(String[] args) {
-        run("TestCases/input4.txt", "TestOutputs/my_output4.txt");
+//        run("TestCases/input4.txt", "TestOutputs/my_output4.txt");
 
 //        testClauseInitByList();
 
 //        testClauseInitByString();
 
-//        testClauseWeight();
+        testClauseWeight("TestCases/input4.txt");
     }
 
     private static void run(String inputFilePath, String outputFilePath) {
@@ -51,18 +51,17 @@ public class Tester {
         System.out.println(clause);
     }
 
-    private static void testClauseWeight() {
-        CNFClause c1 = new CNFClause("H(x)");
-        CNFClause c2 = new CNFClause("X(x) => Y(y)");
-        CNFClause c3 = new CNFClause("A(x) & B(y) => C(z)");
+    private static void testClauseWeight(String inputFilePath) {
+        InputData inputData = FileUtility.parseInput(inputFilePath);
 
-        Set< CNFClause> clauseMap = new TreeSet<>();
-        clauseMap.add(c3);
-        clauseMap.add(c2);
-        clauseMap.add(c1);
+        List<String> sentences = inputData.getSentences();
 
-        for (CNFClause clause: clauseMap) {
-            System.out.println(clause);
+        KnowledgeBase knowledgeBase = new KnowledgeBase(sentences);
+
+        PriorityQueue<CNFClause> clausePriorityQueue = knowledgeBase.getClausePriorityQueue();
+
+        while(!clausePriorityQueue.isEmpty()) {
+            System.out.println(clausePriorityQueue.poll());
         }
     }
 }

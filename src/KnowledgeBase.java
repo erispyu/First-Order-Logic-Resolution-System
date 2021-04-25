@@ -1,19 +1,19 @@
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class KnowledgeBase {
     private Map<String, Term> constantMap;
 
-    private Map<String, CNFClause> CFNClauseMap;
+    private Map<String, CNFClause> clauseMap;
 
-    private Map<Predicate, List<CNFClause>> predicateCNFClauseListMap;
+    private Map<Predicate, List<CNFClause>> predicateClauseListMap;
+
+    private PriorityQueue<CNFClause> clausePriorityQueue;
 
     public KnowledgeBase() {
         this.constantMap = new HashMap<>();
-        this.CFNClauseMap = new HashMap<>();
-        this.predicateCNFClauseListMap = new HashMap<>();
+        this.clauseMap = new HashMap<>();
+        this.predicateClauseListMap = new HashMap<>();
+        this.clausePriorityQueue = new PriorityQueue<>();
     }
 
     // Init the KB
@@ -30,22 +30,23 @@ public class KnowledgeBase {
     }
 
     private void recordClause(CNFClause clause) {
-        this.CFNClauseMap.put(clause.toString(), clause);
+        this.clauseMap.put(clause.toString(), clause);
+        this.clausePriorityQueue.add(clause);
 
         for (Predicate predicate: clause.getPredicateLiteralListMap().keySet()) {
-            mapPredicateCNFClause(predicate, clause);
+            mapPredicateClause(predicate, clause);
         }
 
         addConstantMap(clause.getConstantMap());
     }
 
-    private void mapPredicateCNFClause(Predicate predicate, CNFClause clause) {
-        if (this.predicateCNFClauseListMap.containsKey(predicate)) {
-            this.predicateCNFClauseListMap.get(predicate).add(clause);
+    private void mapPredicateClause(Predicate predicate, CNFClause clause) {
+        if (this.predicateClauseListMap.containsKey(predicate)) {
+            this.predicateClauseListMap.get(predicate).add(clause);
         } else {
             List<CNFClause> clauseList = new LinkedList<>();
             clauseList.add(clause);
-            this.predicateCNFClauseListMap.put(predicate, clauseList);
+            this.predicateClauseListMap.put(predicate, clauseList);
         }
     }
 
@@ -57,17 +58,21 @@ public class KnowledgeBase {
         this.constantMap.putAll(constantMap);
     }
 
-    public Map<String, CNFClause> getCFNClauseMap() {
-        return CFNClauseMap;
+    public Map<String, CNFClause> getClauseMap() {
+        return clauseMap;
     }
 
-    public Map<Predicate, List<CNFClause>> getPredicateCNFClauseListMap() {
-        return predicateCNFClauseListMap;
+    public Map<Predicate, List<CNFClause>> getPredicateClauseListMap() {
+        return predicateClauseListMap;
+    }
+
+    public PriorityQueue<CNFClause> getClausePriorityQueue() {
+        return clausePriorityQueue;
     }
 
     public KnowledgeBase getDeepCopy() {
         KnowledgeBase copy = new KnowledgeBase();
-        for(CNFClause clause: this.CFNClauseMap.values()) {
+        for(CNFClause clause: this.clauseMap.values()) {
             copy.addClause(clause.getDeepCopy());
         }
         return copy;
