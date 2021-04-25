@@ -25,11 +25,7 @@ public class KnowledgeBase {
         }
     }
 
-    public void addClause(CNFClause clause) {
-        recordClause(clause);
-    }
-
-    private void recordClause(CNFClause clause) {
+    public void recordClause(CNFClause clause) {
         this.clauseMap.put(clause.toString(), clause);
         this.clausePriorityQueue.add(clause);
 
@@ -73,7 +69,7 @@ public class KnowledgeBase {
     public KnowledgeBase getDeepCopy() {
         KnowledgeBase copy = new KnowledgeBase();
         for(CNFClause clause: this.clauseMap.values()) {
-            copy.addClause(clause.getDeepCopy());
+            copy.recordClause(clause.getDeepCopy());
         }
         return copy;
     }

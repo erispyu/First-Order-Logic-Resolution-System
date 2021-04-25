@@ -61,7 +61,7 @@ public class Tester {
         PriorityQueue<CNFClause> clausePriorityQueue = knowledgeBase.getClausePriorityQueue();
 
         while(!clausePriorityQueue.isEmpty()) {
-            System.out.println(clausePriorityQueue.poll());
+            System.out.println(clausePriorityQueue.poll().size());
         }
     }
 }
