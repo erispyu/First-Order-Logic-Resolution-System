@@ -24,6 +24,7 @@ public class CNFClause implements Comparable<CNFClause>{
     // Convert Implication sentence to CNF Clause
     public CNFClause(String str) {
         this();
+        str = str.replaceAll(" ", "");
 
         // if is a unit clause
         if (!str.contains(Operator.Implication.denotation)) {
@@ -39,7 +40,6 @@ public class CNFClause implements Comparable<CNFClause>{
         SingleLiteral conclusion;
 
         // Split the premises and the conclusion
-        str = str.replaceAll(" ", "");
         String[] strParts = str.split(Operator.Implication.denotation);
 
         conclusion = new SingleLiteral(strParts[1]);
@@ -208,5 +208,9 @@ public class CNFClause implements Comparable<CNFClause>{
 
     public Set<Predicate> getPredicateSet() {
         return this.predicateLiteralListMap.keySet();
+    }
+
+    public List<SingleLiteral> getMatchedLiterals(Predicate predicate) {
+        return this.predicateLiteralListMap.get(predicate);
     }
 }

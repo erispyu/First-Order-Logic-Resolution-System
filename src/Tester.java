@@ -3,13 +3,17 @@ import java.util.*;
 public class Tester {
 
     public static void main(String[] args) {
-        run("TestCases/test_input_1.txt", "TestOutputs/my_output1.txt");
+//        run("TestCases/test_input_1.txt", "TestOutputs/my_output1.txt");
 
 //        testClauseInitByList();
 
 //        testClauseInitByString();
 
 //        testClauseWeight("TestCases/input4.txt");
+
+//        testResolve();
+
+        testGetUnifiedLiteral();
     }
 
     private static void run(String inputFilePath, String outputFilePath) {
@@ -67,5 +71,31 @@ public class Tester {
         }
 
         System.out.println(clausePriorityQueue);
+    }
+
+    private static void testResolve() {
+        Predicate predicate = new Predicate("Ready", 1);
+        CNFClause c1 = new CNFClause("Ready(Ted)");
+        CNFClause c2 = new CNFClause("~Ready(Ted)");
+
+        ResolutionUtility.resolve(c1, c2, predicate);
+    }
+
+    private static void testGetUnifiedLiteral() {
+        SingleLiteral l = new SingleLiteral("~Play(x, y, Cindy)");
+        Map<Term, Term> subset = new HashMap<>();
+        Term x = new Term("x");
+        Term y = new Term("y");
+        Term z = new Term("z");
+        Term alice = new Term("Alice");
+        Term bob = new Term("Bob");
+        Term cindy = new Term("Cindy");
+
+        subset.put(x, alice);
+        subset.put(y, bob);
+        subset.put(z, cindy);
+
+        SingleLiteral unifiedLiteral = ResolutionUtility.getUnifiedLiteral(l, subset);
+        System.out.println(unifiedLiteral);
     }
 }

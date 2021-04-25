@@ -52,7 +52,7 @@ public class ResolutionHelper {
                 for (Predicate predicate: c1.getPredicateSet()) {
                     PriorityQueue<CNFClause> matchedClauses = new PriorityQueue<>(knowledgeBase.getPredicateClausePQMap().get(predicate));
                     while(!matchedClauses.isEmpty()) {
-                        CNFClause resolventClause = ResolutionUtility.resolve(c1, matchedClauses.poll());
+                        CNFClause resolventClause = ResolutionUtility.resolve(c1, matchedClauses.poll(), predicate);
                         if (resolventClause == null) {
                             continue;
                         } else if (knowledgeBase.containsClause(resolventClause)) {

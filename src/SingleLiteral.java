@@ -1,3 +1,6 @@
+import java.util.Arrays;
+import java.util.Objects;
+
 public class SingleLiteral{
 
     private Predicate predicate;
@@ -6,10 +9,8 @@ public class SingleLiteral{
 
     private boolean isPositive;
 
-    private String str;
-
     public SingleLiteral(String str) {
-        this.str = str;
+        str = str.replaceAll(" ", "");
 
         String predicateName;
         int predicateNameBeginIndex = -1;
@@ -52,14 +53,13 @@ public class SingleLiteral{
 
     public SingleLiteral(SingleLiteral literal, boolean isNegated) {
         this.predicate = literal.getPredicate();
-        this.terms = literal.getTerms();
-        this.isPositive = isNegated ? !literal.isPositive : literal.isPositive;
-        this.str = literal.str;
-        if (!this.isPositive) {
-            this.str = Operator.Negation.denotation + this.str;
-        } else {
-            this.str = this.str.substring(1);
+        this.terms = new Term[this.predicate.getArgSize()];
+        Term[] preTerms = literal.getTerms();
+        for (int i = 0; i < this.terms.length; i++) {
+            this.terms[i] = preTerms[i];
         }
+
+        this.isPositive = isNegated? !literal.isPositive : literal.isPositive;
     }
 
     private void parseTerms(String[] termStrArr) {
@@ -88,11 +88,6 @@ public class SingleLiteral{
 
     public void switchPositiveNegative() {
         this.isPositive = !this.isPositive;
-        if (!this.isPositive) {
-            this.str = Operator.Negation.denotation + this.str;
-        } else {
-            this.str = this.str.substring(1);
-        }
     }
 
     public SingleLiteral getNegation() {
@@ -101,6 +96,18 @@ public class SingleLiteral{
 
     @Override
     public String toString() {
-        return this.str;
+        StringBuffer sb = new StringBuffer();
+        if(!isPositive) {
+            sb.append(Operator.Negation.denotation);
+        }
+        sb.append(predicate.getName());
+        sb.append("(");
+        for (Term term: terms) {
+            sb.append(term.getName());
+            sb.append(",");
+        }
+        sb.deleteCharAt(sb.length() - 1);
+        sb.append(")");
+        return sb.toString();
     }
 }
