@@ -3,7 +3,7 @@ import java.util.*;
 public class Tester {
 
     public static void main(String[] args) {
-        run("TestCases/input4.txt", "TestOutputs/my_output1.txt");
+        run("TestCases/test_input_3.txt", "TestOutputs/my_output1.txt");
 
 //        testClauseInitByList();
 
@@ -26,16 +26,14 @@ public class Tester {
 
         KnowledgeBase knowledgeBase = new KnowledgeBase(sentences);
 
-        List<String> results = new LinkedList<>();
-
         for (SingleLiteral query: queries) {
             ResolutionHelper resolutionHelper = new ResolutionHelper(query, knowledgeBase);
             boolean result = resolutionHelper.query();
 
-            results.add(Boolean.toString(result).toUpperCase());
+            System.out.println(Boolean.toString(result).toUpperCase());
         }
 
-        FileUtility.generateOutput(outputFilePath, results);
+//        FileUtility.generateOutput(outputFilePath, results);
     }
 
     private static void testClauseInitByList() {
