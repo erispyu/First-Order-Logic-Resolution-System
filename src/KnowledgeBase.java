@@ -20,26 +20,12 @@ public class KnowledgeBase {
     public KnowledgeBase(List<String> sentences) {
         this();
         for (String sentence: sentences) {
-            if (sentence.contains(Operator.Implication.denotation)) {
-                parseImplication(sentence);
-            } else {
-                parseSingleLiteral(sentence);
-            }
+            CNFClause clause = new CNFClause(sentence);
+            recordClause(clause);
         }
     }
 
     public void addClause(CNFClause clause) {
-        recordClause(clause);
-    }
-
-    private void parseSingleLiteral(String str) {
-        SingleLiteral literal = new SingleLiteral(str);
-        CNFClause clause = new CNFClause(literal);
-        recordClause(clause);
-    }
-
-    private void parseImplication(String str) {
-        CNFClause clause = new CNFClause(str);
         recordClause(clause);
     }
 

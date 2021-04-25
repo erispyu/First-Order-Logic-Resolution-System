@@ -1,6 +1,6 @@
 import java.util.*;
 
-public class CNFClause {
+public class CNFClause implements Comparable<CNFClause>{
     private List<SingleLiteral> literalList;
     private List<SingleLiteral> positiveLiteralList;
     private List<SingleLiteral> negativeLiteralList;
@@ -24,6 +24,15 @@ public class CNFClause {
     // Convert Implication sentence to CNF Clause
     public CNFClause(String str) {
         this();
+
+        // if is a unit clause
+        if (!str.contains(Operator.Implication.denotation)) {
+            SingleLiteral literal = new SingleLiteral(str);
+            recordLiteral(literal);
+            return;
+        }
+
+        // if is an implication clause
 
         // 1. Eliminate implications
         List<SingleLiteral> premiseList = new LinkedList<>();
@@ -190,5 +199,10 @@ public class CNFClause {
     public CNFClause getDeepCopy() {
         CNFClause clause = new CNFClause(this.literalList);
         return clause;
+    }
+
+    @Override
+    public int compareTo(CNFClause o) {
+        return this.size() - o.size();
     }
 }
