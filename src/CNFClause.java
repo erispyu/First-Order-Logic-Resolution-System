@@ -30,7 +30,6 @@ public class CNFClause implements Comparable<CNFClause>{
         if (!str.contains(Operator.Implication.denotation)) {
             SingleLiteral literal = new SingleLiteral(str);
             recordLiteral(literal);
-            standardize();
             return;
         }
 
@@ -70,14 +69,12 @@ public class CNFClause implements Comparable<CNFClause>{
             recordLiteral(premise);
         }
         recordLiteral(conclusion);
-        standardize();
     }
 
     // Use a single literal as a Clause
     public CNFClause(SingleLiteral literal) {
         this();
         recordLiteral(literal);
-        standardize();
     }
 
     // Init a CNFClause from a literal list, assuming connected by disjunction
@@ -94,7 +91,6 @@ public class CNFClause implements Comparable<CNFClause>{
                 recordLiteral(literal);
             }
         }
-        standardize();
     }
 
     public List<SingleLiteral> getLiteralList() {
@@ -233,9 +229,10 @@ public class CNFClause implements Comparable<CNFClause>{
         return this.predicateLiteralListMap.get(predicate);
     }
 
-    private void standardize() {
+    public void standardize() {
+        int hashCode = hashCode();
         for (Term variable: variableMap.values()) {
-            variable.hashName(hashCode());
+            variable.hashName(hashCode);
         }
     }
 }

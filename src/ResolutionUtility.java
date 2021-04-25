@@ -17,27 +17,32 @@ public class ResolutionUtility {
 
         for (SingleLiteral matchedLiteral1: c1MatchedLiterals) {
             for (SingleLiteral matchedLiteral2: c2MatchedLiterals) {
-                Map<Term, Term> subset = unify(matchedLiteral1, matchedLiteral2.getNegation());
+                // The two literals must be complementary for binary-resolution
+                if (matchedLiteral1.isPositive() == matchedLiteral2.isPositive()) {
+                    continue;
+                }
+
+                Map<Term, Term> subset = unify(matchedLiteral1, matchedLiteral2);
                 if (subset == null) {
                     continue;
-                } else {
-                    // resolve two clauses
-                    List<SingleLiteral> resolventLiterals = new LinkedList<>();
-                    for (SingleLiteral l1: c1.getLiteralList()) {
-                        if (!l1.equals(matchedLiteral1)) {
-                            resolventLiterals.add(getUnifiedLiteral(l1, subset));
-                        }
-                    }
-
-                    for (SingleLiteral l2: c2.getLiteralList()) {
-                        if (!l2.equals(matchedLiteral2)) {
-                            resolventLiterals.add(getUnifiedLiteral(l2, subset));
-                        }
-                    }
-
-                    // return the resolvent clause
-                    return new CNFClause(resolventLiterals);
                 }
+
+                // resolve two clauses
+                List<SingleLiteral> resolventLiterals = new LinkedList<>();
+                for (SingleLiteral l1: c1.getLiteralList()) {
+                    if (!l1.equals(matchedLiteral1)) {
+                        resolventLiterals.add(getUnifiedLiteral(l1, subset));
+                    }
+                }
+
+                for (SingleLiteral l2: c2.getLiteralList()) {
+                    if (!l2.equals(matchedLiteral2)) {
+                        resolventLiterals.add(getUnifiedLiteral(l2, subset));
+                    }
+                }
+
+                // return the resolvent clause
+                return new CNFClause(resolventLiterals);
             }
         }
 
@@ -45,6 +50,9 @@ public class ResolutionUtility {
     }
 
     private static Map<Term, Term> unify(SingleLiteral l1, SingleLiteral l2) {
+        Term[] l1terms = l1.getTerms();
+        Term[] l2Terms = l2.getTerms();
+
         return null;
     }
 

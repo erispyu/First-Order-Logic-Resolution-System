@@ -34,6 +34,7 @@ public class KnowledgeBase {
         }
 
         addConstantMap(clause.getConstantMap());
+        clause.standardize();
     }
 
     private void mapPredicateClause(Predicate predicate, CNFClause clause) {

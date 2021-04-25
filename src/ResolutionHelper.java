@@ -44,26 +44,22 @@ public class ResolutionHelper {
 
         // TODO
         // linear resolution: either one clause is in the original jb, or the other is newly generated.
-        boolean flag = true;
-        while(flag) {
-            PriorityQueue<CNFClause> copiedGeneratedClausePQ = new PriorityQueue<>(generatedClausePQ);
-            while(!copiedGeneratedClausePQ.isEmpty()) {
-                CNFClause c1 = copiedGeneratedClausePQ.peek();
-                for (Predicate predicate: c1.getPredicateSet()) {
-                    PriorityQueue<CNFClause> matchedClauses = new PriorityQueue<>(knowledgeBase.getPredicateClausePQMap().get(predicate));
-                    while(!matchedClauses.isEmpty()) {
-                        CNFClause resolventClause = ResolutionUtility.resolve(c1, matchedClauses.poll(), predicate);
-                        if (resolventClause == null) {
-                            continue;
-                        } else if (knowledgeBase.containsClause(resolventClause)) {
-                            // loop proof, return false
-                            return false;
-                        } else if (resolventClause.isEmpty()) {
-                            // contradiction found!
-                            return true;
-                        } else {
-                            recordGeneratedClause(resolventClause);
-                        }
+        while(!generatedClausePQ.isEmpty()) {
+            CNFClause c1 = generatedClausePQ.poll();
+            for (Predicate predicate: c1.getPredicateSet()) {
+                PriorityQueue<CNFClause> matchedClauses = new PriorityQueue<>(knowledgeBase.getPredicateClausePQMap().get(predicate));
+                while(!matchedClauses.isEmpty()) {
+                    CNFClause resolventClause = ResolutionUtility.resolve(c1, matchedClauses.poll(), predicate);
+                    if (resolventClause == null) {
+                        continue;
+                    } else if (knowledgeBase.containsClause(resolventClause)) {
+                        // loop proof, return false
+                        return false;
+                    } else if (resolventClause.isEmpty()) {
+                        // contradiction found!
+                        return true;
+                    } else {
+                        recordGeneratedClause(resolventClause);
                     }
                 }
             }

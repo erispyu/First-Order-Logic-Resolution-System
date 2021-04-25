@@ -3,7 +3,7 @@ import java.util.*;
 public class Tester {
 
     public static void main(String[] args) {
-        run("TestCases/test_input_1.txt", "TestOutputs/my_output1.txt");
+//        run("TestCases/test_input_1.txt", "TestOutputs/my_output1.txt");
 
 //        testClauseInitByList();
 
@@ -14,6 +14,8 @@ public class Tester {
 //        testResolve();
 
 //        testGetUnifiedLiteral();
+
+        testStandardize();
     }
 
     private static void run(String inputFilePath, String outputFilePath) {
@@ -29,6 +31,9 @@ public class Tester {
         for (SingleLiteral query: queries) {
             ResolutionHelper resolutionHelper = new ResolutionHelper(query, knowledgeBase);
             boolean result = resolutionHelper.query();
+
+            System.out.println(Boolean.toString(result).toUpperCase());
+
             results.add(Boolean.toString(result).toUpperCase());
         }
 
@@ -97,5 +102,15 @@ public class Tester {
 
         SingleLiteral unifiedLiteral = ResolutionUtility.getUnifiedLiteral(l, subset);
         System.out.println(unifiedLiteral);
+    }
+
+    private static void testStandardize() {
+        CNFClause c1 = new CNFClause("A(x) & B(y) => C(z)");
+        c1.standardize();
+        CNFClause c2 = new CNFClause("A(x)");
+        c2.standardize();
+
+        System.out.println(c1);
+        System.out.println(c2);
     }
 }

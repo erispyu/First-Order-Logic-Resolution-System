@@ -30,7 +30,12 @@ public class Term {
     }
 
     public void hashName(int hashCode) {
-        this.name = this.name + "_" + hashCode;
+        if (this.name.contains("_")) {
+            String originName = this.name.split("_")[0];
+            this.name = originName + "_" + hashCode;
+        } else {
+            this.name = this.name + "_" + hashCode;
+        }
     }
 
     @Override
