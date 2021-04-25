@@ -205,4 +205,8 @@ public class CNFClause implements Comparable<CNFClause>{
     public int compareTo(CNFClause o) {
         return this.size() - o.size();
     }
+
+    public Set<Predicate> getPredicateSet() {
+        return this.predicateLiteralListMap.keySet();
+    }
 }

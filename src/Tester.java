@@ -3,7 +3,7 @@ import java.util.*;
 public class Tester {
 
     public static void main(String[] args) {
-        run("TestCases/test_input_1.txt", "TestOutputs/my_output4.txt");
+        run("TestCases/test_input_1.txt", "TestOutputs/my_output1.txt");
 
 //        testClauseInitByList();
 
@@ -23,8 +23,8 @@ public class Tester {
         List<String> results = new LinkedList<>();
 
         for (SingleLiteral query: queries) {
-            QueryHelper queryHelper = new QueryHelper(query, knowledgeBase);
-            boolean result = queryHelper.query();
+            ResolutionHelper resolutionHelper = new ResolutionHelper(query, knowledgeBase);
+            boolean result = resolutionHelper.query();
             results.add(Boolean.toString(result).toUpperCase());
         }
 
@@ -60,8 +60,12 @@ public class Tester {
 
         PriorityQueue<CNFClause> clausePriorityQueue = knowledgeBase.getClausePQ();
 
-        while(!clausePriorityQueue.isEmpty()) {
-            System.out.println(clausePriorityQueue.poll().size());
+        PriorityQueue<CNFClause> newPQ = new PriorityQueue<>(clausePriorityQueue);
+
+        while(!newPQ.isEmpty()) {
+            System.out.println(newPQ.poll().size());
         }
+
+        System.out.println(clausePriorityQueue);
     }
 }

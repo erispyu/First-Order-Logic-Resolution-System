@@ -73,4 +73,8 @@ public class KnowledgeBase {
         }
         return copy;
     }
+
+    public boolean containsClause(CNFClause clause) {
+        return this.clauseMap.containsKey(clause.toString());
+    }
 }
