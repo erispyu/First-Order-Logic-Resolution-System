@@ -8,10 +8,8 @@ public class ResolutionHelper {
     private Set<Predicate> kbPredicateSet;
 
     private Map<String, CNFClause> originalClauseMap;
-    private PriorityQueue<CNFClause> originalClausePQ;
 
-    private Map<String, CNFClause> generatedClauseMap;
-    private PriorityQueue<CNFClause> generatedClausePQ;
+    private PriorityQueue<CNFClause> copiedClausePQ;
 
     public ResolutionHelper(SingleLiteral query, KnowledgeBase knowledgeBase) {
         this.query = query;
@@ -21,10 +19,8 @@ public class ResolutionHelper {
         this.kbPredicateSet = knowledgeBase.getPredicateClausePQMap().keySet();
 
         this.originalClauseMap = knowledgeBase.getClauseMap();
-        this.originalClausePQ = knowledgeBase.getClausePQ();
 
-        this.generatedClauseMap = new HashMap<>();
-        this.generatedClausePQ = new PriorityQueue<>();
+        this.copiedClausePQ = new PriorityQueue<>(knowledgeBase.getClausePQ());
     }
 
     public boolean query() {
@@ -42,14 +38,17 @@ public class ResolutionHelper {
         // Add the negated query to the KB
         recordGeneratedClause(negatedQueryClause);
 
-        // TODO
         // linear resolution: either one clause is in the original jb, or the other is newly generated.
-        while(!generatedClausePQ.isEmpty()) {
-            CNFClause c1 = generatedClausePQ.poll();
-            for (Predicate predicate: c1.getPredicateSet()) {
+        while(!copiedClausePQ.isEmpty()) {
+            CNFClause clauseToResolve = copiedClausePQ.poll();
+            for (Predicate predicate: clauseToResolve.getPredicateSet()) {
                 PriorityQueue<CNFClause> matchedClauses = new PriorityQueue<>(knowledgeBase.getPredicateClausePQMap().get(predicate));
                 while(!matchedClauses.isEmpty()) {
-                    CNFClause resolventClause = ResolutionUtility.resolve(c1, matchedClauses.poll(), predicate);
+                    CNFClause matched = matchedClauses.poll();
+                    if (clauseToResolve == matched) {
+                        continue;
+                    }
+                    CNFClause resolventClause = ResolutionUtility.resolve(clauseToResolve, matched, predicate);
                     if (resolventClause == null) {
                         continue;
                     } else if (knowledgeBase.containsClause(resolventClause)) {
@@ -69,7 +68,6 @@ public class ResolutionHelper {
 
     private void recordGeneratedClause(CNFClause clause) {
         knowledgeBase.recordClause(clause);
-        this.generatedClauseMap.put(clause.toString(), clause);
-        this.generatedClausePQ.add(clause);
+        this.copiedClausePQ.add(clause);
     }
 }

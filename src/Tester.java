@@ -3,7 +3,7 @@ import java.util.*;
 public class Tester {
 
     public static void main(String[] args) {
-//        run("TestCases/test_input_1.txt", "TestOutputs/my_output1.txt");
+        run("TestCases/input4.txt", "TestOutputs/my_output1.txt");
 
 //        testClauseInitByList();
 
@@ -15,7 +15,7 @@ public class Tester {
 
 //        testGetUnifiedLiteral();
 
-        testStandardize();
+//        testStandardize();
     }
 
     private static void run(String inputFilePath, String outputFilePath) {
@@ -100,7 +100,7 @@ public class Tester {
         subset.put(y, bob);
         subset.put(z, cindy);
 
-        SingleLiteral unifiedLiteral = ResolutionUtility.getUnifiedLiteral(l, subset);
+        SingleLiteral unifiedLiteral = ResolutionUtility.getUnifiedLiteral(l, new HashMap<>());
         System.out.println(unifiedLiteral);
     }
 

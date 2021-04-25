@@ -24,11 +24,13 @@ public class ResolutionUtility {
 
                 Map<Term, Term> subset = unify(matchedLiteral1, matchedLiteral2);
                 if (subset == null) {
+                    // cannot unify
                     continue;
                 }
 
                 // resolve two clauses
                 List<SingleLiteral> resolventLiterals = new LinkedList<>();
+
                 for (SingleLiteral l1: c1.getLiteralList()) {
                     if (!l1.equals(matchedLiteral1)) {
                         resolventLiterals.add(getUnifiedLiteral(l1, subset));
@@ -50,10 +52,67 @@ public class ResolutionUtility {
     }
 
     private static Map<Term, Term> unify(SingleLiteral l1, SingleLiteral l2) {
+        Map<Term, Term> subset = new HashMap<>();
+
         Term[] l1terms = l1.getTerms();
         Term[] l2Terms = l2.getTerms();
 
-        return null;
+        int argSize = l1terms.length;
+
+        for (int i = 0; i < argSize; i++) {
+            Term t1 = l1terms[i];
+            Term t2 = l2Terms[i];
+
+            // both constant
+            if (t1.isConstant() && t2.isConstant()) {
+                if (t1.equals(t2)) {
+                    continue;
+                } else {
+                    return null;
+                }
+            }
+
+            // both variable
+            else if (t1.isVariable() && t2.isVariable()) {
+                if (subset.containsKey(t1)) {
+                    if (t2.equals(subset.get(t1))) {
+                        continue;
+                    } else {
+                        return null;
+                    }
+                } else {
+                    subset.put(t1, t2);
+                }
+            }
+
+            // t1 is variable, t2 is constant
+            else if (t1.isVariable()) {
+                if (subset.containsKey(t1)) {
+                    if (t2.equals(subset.get(t1))) {
+                        continue;
+                    } else {
+                        return null;
+                    }
+                } else {
+                    subset.put(t1, t2);
+                }
+            }
+
+            // t2 is variable, t1 is constant
+            else {
+                if (subset.containsKey(t2)) {
+                    if (t1.equals(subset.get(t2))) {
+                        continue;
+                    } else {
+                        return null;
+                    }
+                } else {
+                    subset.put(t2, t1);
+                }
+            }
+        }
+
+        return subset;
     }
 
     public static SingleLiteral getUnifiedLiteral(SingleLiteral l, Map<Term, Term> subset) {
