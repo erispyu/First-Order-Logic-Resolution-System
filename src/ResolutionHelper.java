@@ -61,10 +61,6 @@ public class ResolutionHelper {
                         CNFClause resolventClause = ResolutionUtility.resolve(clauseToResolve, matched, predicate);
                         if (resolventClause == null) continue;
 
-//                        System.out.println("Resolve: " + clauseToResolve + " and " + matched);
-//                        System.out.println("Resolvent: " + resolventClause);
-//                        System.out.println("-----------------------------------------------");
-
                         if (resolventClause.isEmpty()) {
                             // contradiction found!
                             return true;

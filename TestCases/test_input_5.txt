@@ -1,5 +1,7 @@
 1
-C(X, Y)
-2
-~A(x) & B(x) => C(x, Y)
-A(x) & ~B(x) => C(X, y)
+D(o)
+4
+A(x, y) & E(y) => B(x)
+B(y) & F(y) => C(y)
+C(z) & G(z) => D(z)
+A(x, t)

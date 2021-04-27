@@ -31,6 +31,13 @@ public class ResolutionUtility {
                 // resolve two clauses
                 List<SingleLiteral> resolventLiterals = new LinkedList<>();
 
+                System.out.println("Resolve: " + c1 + " and " + c2);
+                System.out.print("Subset: ");
+                for (Map.Entry<Term, Term> entry: subset.entrySet()) {
+                    System.out.print(entry.getKey().getOriginName() + " = " + entry.getValue().getOriginName() + ", ");
+                }
+                System.out.println();
+
                 for (SingleLiteral l1: c1.getLiteralList()) {
                     if (!l1.equals(matchedLiteral1)) {
                         resolventLiterals.add(getUnifiedLiteral(l1, subset));
@@ -44,7 +51,10 @@ public class ResolutionUtility {
                 }
 
                 // return the resolvent clause
-                return new CNFClause(resolventLiterals);
+                CNFClause resolventClause = new CNFClause(resolventLiterals);
+                System.out.println("Resolvent: " + resolventClause);
+                System.out.println("-----------------------------------------------");
+                return resolventClause;
             }
         }
 
